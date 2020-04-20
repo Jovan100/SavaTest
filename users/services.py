@@ -8,7 +8,7 @@ def post_user(full_name, email, password):
         "password": password
     }
     response = requests.post(url, data=data)
-    if response.status_code == 200:
+    if response.status_code == 201:
         print('Success!')
     else:
         print('Error!')
@@ -20,9 +20,9 @@ def send_email(email):
     }
     response = requests.post(url, data=data)
     if response.status_code == 201:
-        print('Success!')
+        return 201
     else:
-        print('Error!')
+        return None
 
 def change_password(token, password):
     url = "http://localhost:8000/api/password-reset/" + token + "/"

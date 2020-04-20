@@ -49,8 +49,12 @@ class ForgotPassword(FormView):
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        services.send_email(email)
-        return super(ForgotPassword, self).form_valid(form)
+        response = services.send_email(email)
+        if response == 201:
+            return super(ForgotPassword, self).form_valid(form)
+        else:
+            message = 'There is no user with that email addres in our database!'
+            return render(self.request, self.template_name, {'form': form, 'message': message})
 
 class ChangePassword(FormView):
     template_name = 'password_change.html'

@@ -46,18 +46,6 @@ class PasswordResetViewSet(GenericModelViewSet):
         'partial_update': [AllowAny]
     }
 
-    def retrieve(self, request, pk=None, **kwargs):
-        queryset = PasswordReset.objects.all()
-        reset = get_object_or_404(queryset, pk=pk)
-        print(datetime.now().date())
-        print(reset.created_at.date())
-        print(timedelta(hours=2))
-        print(datetime.now().date() - reset.created_at.date())
-        if datetime.now().date() - reset.created_at.date() > timedelta(days=2):
-            return Response(status=403)
-        serializer = PasswordResetSerializer(reset)
-        return Response(serializer.data)
-
     def create(self, request, *args, **kwargs):
         data = {'email': request.data['email'], 'token': str(uuid.uuid4())}
         serialized = PasswordResetSerializer(data=data)
@@ -71,7 +59,7 @@ class PasswordResetViewSet(GenericModelViewSet):
             send_email(data)
             return Response(serialized.data, status=201)
         else:
-            return Response(serialized.errors, status=201)
+            return Response(serialized.errors, status=403)
 
     def partial_update(self, request, *args, **kwargs):
         queryset = PasswordReset.objects.all()
@@ -88,7 +76,7 @@ class PasswordResetViewSet(GenericModelViewSet):
                 PasswordReset.objects.filter(token=request.data['token']).delete()
                 return Response(user.data, status=201)
             else:
-                return Response(user.errors, status=201)
+                return Response(user.errors, status=403)
             return Response(status=200)
         else:
             return Response(status=403)
