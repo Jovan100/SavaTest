@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block head_title %}Login{% endblock %}
+
+{% block content %}
+  <h1>Login Page</h1><hr>
+  <form action="" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div>
+        {{ field.label }}: {{ field }}
+      </div><br>
+      {% for error in field.errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    {% endfor %}
+    <input type="submit" value="Login">
+  </form><hr>
+  <a href="register/">Sing Up</a><hr>
+  <a href="forgot-password/">Forgot your password?</a>
+
+{% endblock %}

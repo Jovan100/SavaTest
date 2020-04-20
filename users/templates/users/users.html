@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block head_title %}Dashboard{% endblock %}
+
+{% block content %}
+
+  {% for user in users %}
+    {{user.full_name}}
+    <br>
+    {{user.email}}
+    <hr>
+  {% endfor %}
+
+{% endblock %}
