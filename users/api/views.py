@@ -42,9 +42,17 @@ class PasswordResetViewSet(GenericModelViewSet):
     serializer_class = PasswordResetSerializer
     permission_classes_by_action = {
         'create': [AllowAny],
-        'retireve': [AllowAny],
+        'retrieve': [AllowAny],
         'partial_update': [AllowAny]
     }
+
+    def retrieve(self, request, pk=None, **kwargs):
+        queryset = PasswordReset.objects.all()
+        reset = get_object_or_404(queryset, token=pk)
+        if datetime.now().date() - reset.created_at.date() > timedelta(hours=2):
+            return Response(status=403)
+        serializer = PasswordResetSerializer(reset)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         data = {'email': request.data['email'], 'token': str(uuid.uuid4())}

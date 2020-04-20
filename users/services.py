@@ -45,3 +45,11 @@ def get_users(request):
     users = response.json()
     users_list = {"users": users}
     return users_list
+
+def get_email(token):
+    url = "http://localhost:8000/api/password-reset/" + token + "/"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return 200
+    else:
+        return None

@@ -14,6 +14,9 @@
         <p>{{ error }}</p>
       {% endfor %}
     {% endfor %}
+    {% if message %}
+    {{ message }}<br><br>
+    {% endif %}
     <input type="submit" value="Login">
   </form><hr>
   <a href="register/">Sing Up</a><hr>

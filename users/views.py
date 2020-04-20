@@ -21,6 +21,9 @@ class Login(FormView):
             request.session['user_email'] = email
             request.session['user_password'] = password
             return redirect('dashboard/')
+        else:
+            message = 'Wrong email or password!'
+            return render(self.request, self.template_name, {'form': form, 'message': message})
         return super(Login, self).form_invalid(form)
 
 class Logout(View):
@@ -61,11 +64,19 @@ class ChangePassword(FormView):
     form_class = ChangePasswordForm
     success_url = '/'
 
+    def get(self, request, token):
+        response = services.get_email(token)
+        if response == None:
+            message = 'Token has expired!'
+            return render(self.request, self.template_name, {'message': message})
+        else:
+            form = ChangePasswordForm()
+            return render(self.request, self.template_name, {'form': form})
+
     def form_valid(self, form):
         password1 = form.cleaned_data['password1']
         password2 = form.cleaned_data['password2']
         token = self.request.META['PATH_INFO'][-36:]
-        print("TOKEN: ", token)
         services.change_password(token, password1)
         return super(ChangePassword, self).form_valid(form)
 
