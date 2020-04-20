@@ -2,3 +2,4 @@ djangorestframework==3.11.0
 psycopg2==2.8.5
 sendgrid==6.2.2
 django-environ==0.4.5
+requests==2.23.0
