@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from . import services
 from users.forms import *
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, View
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -22,6 +22,13 @@ class Login(FormView):
             request.session['user_password'] = password
             return redirect('dashboard/')
         return super(Login, self).form_invalid(form)
+
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        request.session['user_email'] = ''
+        request.session['user_password'] = ''
+        return redirect('/')
 
 class Registration(FormView):
     template_name = 'registration.html'
