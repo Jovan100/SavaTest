@@ -33,3 +33,9 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return self.is_admin
+
+class PasswordReset(models.Model):
+    email = models.EmailField(max_length=255)
+    token = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
